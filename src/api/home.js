@@ -28,8 +28,15 @@ export function uploadImg(file) {
  * @desc 发布文章
  * @param params {Object} {mid: 用户id, cover: 封面地址, s_img: 封面缩略图地址, title: 标题, desc: 副标题, content: 内容}
  */
-export function publishArticle(params) {
-  return post('/editor/publishArticle', params)
+// export function publishArticle(params) {
+//   return post('/editor/publishArticle', params)
+// }
+export function pushNewsData(params) {
+  return post('/Articles/pushNewsData', params)
+}
+
+export function getCategory(params) {
+  return post("/Articles/getCategory", params)
 }
 
 /**

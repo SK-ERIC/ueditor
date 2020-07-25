@@ -224,7 +224,6 @@ export default {
     // },
     _uploadFile(file) {
       // this.uploadLoad = true
-      console.log('file', file);
 
       uploadImg(file).then(res => {
         // this.uploadLoad = false

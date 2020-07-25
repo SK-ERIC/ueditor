@@ -88,7 +88,7 @@ export default {
       this.$emit('getUrlFn', res.browser, file.raw)
 
     },
-    beforeAvatarUpload(file) {
+    beforeAvatarUpload(file) { 
       const isLt10M = file.size / 1024 / 1024 < 10;
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/bmp' || file.type === 'image/png';
       if (!isLt10M) {

@@ -24,6 +24,7 @@
 
 <script>
   import LVIcon from '@components/LVIcon'
+  import { pushNewsData } from "@api/home.js";
   import $ from 'jquery'
   export default {
     name: "LVTools",
@@ -67,23 +68,32 @@
           //   icon: 'icon_lv_copy',
           //   disable: true,
           // },
-          {
-            id: '6',
-            title: '保存草稿',
-            name: 'save_draft',
-            icon: 'icon_lv_save',
-            // disable: true,
-          },
-          {
-            id: '7',
-            title: '保存模板',
-            name: 'save_template',
-            icon: 'icon_lv_save',
-            // disable: true,
-          }
+          // {
+          //   id: '6',
+          //   title: '保存草稿',
+          //   name: 'save_draft',
+          //   icon: 'icon_lv_save',
+          //   // disable: true,
+          // },
+          // {
+          //   id: '7',
+          //   title: '保存模板',
+          //   name: 'save_template',
+          //   icon: 'icon_lv_save',
+          //   // disable: true,
+          // }
         ],
-        clipboard: null
+        clipboard: null,
+        title: null,
+        datePicker:null,
+        selectType: null,
+        description: null,
+        readText: null,
+
       }
+    },
+    created() {
+      this.eventBus()
     },
     mounted() {
       this.$nextTick(() => {
@@ -97,9 +107,33 @@
       userId() {
         return this.$store.state.userId
       },
-      
+      userBid() {
+        return this.$store.state.userBid
+      }
     },
     methods: {
+      eventBus(){
+        this.$root.eventVue.$on("title",(message)=>{   //这里最好用箭头函数，不然this指向有问题
+             console.log("1", message)  
+             this.title = message    
+        })
+        this.$root.eventVue.$on("datePicker",(message)=>{   //这里最好用箭头函数，不然this指向有问题
+             console.log("2", message)  
+             this.datepicker = message    
+        })
+        this.$root.eventVue.$on("selectType",(message)=>{   //这里最好用箭头函数，不然this指向有问题
+             console.log("3", message)    
+             this.selectType = message  
+        })
+        this.$root.eventVue.$on("description",(message)=>{   //这里最好用箭头函数，不然this指向有问题
+             console.log("4", message)  
+             this.description = message    
+        })
+        this.$root.eventVue.$on("readText",(message)=>{   //这里最好用箭头函数，不然this指向有问题
+             console.log("5", message)  
+             this.readText = message    
+        })
+      },
       copyEditorHtml() {
         const vm = this
         let toolBar = $(vm.$refs.lvTools)
@@ -137,8 +171,43 @@
           this.$util.ToastWarning('请填写内容后再进行保存')
           return false
         }
-        this.$emit('showSavePop')
-      }
+        // this.$emit('showSavePop')
+
+     let params = {
+        userBid: this.userBid,
+        cid: "1",
+        title: this.title,
+        cover: "",
+        description: this.description,
+        content: this.articleContent,
+        view: this.readText,
+        is_video: null,
+        vido_type: 0,
+        vid: ""
+      };
+
+      pushNewsData(params).then( res => {
+        
+      }) 
+
+
+
+
+      },
+    //   _publishArticle() {
+    //   let params = {
+    //     mid: this.userId,
+    //     cover: this.coverUrl,
+    //     title: this.articleFormModel["title"],
+    //     desc: this.articleFormModel["desc"],
+    //     content: this.articleContent
+    //   };
+    //   console.log(params)
+    //   publishArticle(params).then(() => {
+    //     this.closePop();
+    //     this.$util.ToastSuccess("发布成功");
+    //   });
+    // },
 
     }
   }

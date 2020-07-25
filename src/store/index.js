@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     baseFile: null,
     userId: null,
+    userBid: null,
     userSite: null,
     userName: null,
     userUpic: null,
@@ -24,6 +25,7 @@ export default new Vuex.Store({
   mutations: {
     logout(state) {
       state.userId = null
+      state.userBid = null
       state.userSite = null
       state.userName = null
       state.userUpic = null
@@ -36,6 +38,7 @@ export default new Vuex.Store({
     },
     setMemberData(state, data) {
       state.userId = data.userId ? data.userId : null
+      state.userBid = data.userBid ? data.userBid : null
       state.userSite = data.userSite ? data.userSite : null
       state.userTel = data.userTel ? data.userTel : null
       state.userName = data.userName ? data.userName : '未登录'
@@ -43,6 +46,7 @@ export default new Vuex.Store({
     },
     updateMemberData(state, data) {
       state.userId = data.userId ? data.userId : state.userId
+      state.userBid = data.userBid ? data.userBid : state.userBid
       state.userSite = data.userSite ? data.userSite : state.userSite
       state.userTel = data.userTel ? data.userTel : state.userTel
       state.userName = data.userName ? data.userName : state.userName
@@ -50,6 +54,7 @@ export default new Vuex.Store({
     },
     clearMemberData(state) {
       state.userId = null
+      state.userBid = null
       state.userName = null
       state.userUpic = null
     },

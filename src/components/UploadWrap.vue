@@ -33,7 +33,7 @@
     <div class="item">
       <div class="item-l">
         <div class="label">封面:</div>
-        <!-- <el-upload
+        <el-upload
           class="avatar-uploader"
           action="http://jsonplaceholder.typicode.com/posts/"
           :show-file-list="false"
@@ -42,9 +42,9 @@
         >
           <img v-if="imageUrl" :src="imageUrl" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload> -->
+        </el-upload>
 
-        <upload-img></upload-img>
+        <!-- <upload-img></upload-img> -->
 
       </div>
     </div>
