@@ -23,177 +23,179 @@
 </template>
 
 <script>
-  import LVIcon from '@components/LVIcon'
-  import { pushNewsData } from "@api/home.js";
-  import $ from 'jquery'
-  export default {
-    name: "LVTools",
-    components: {
-      LVIcon,
+import LVIcon from "@components/LVIcon";
+import { pushNewsData } from "@api/home.js";
+import $ from "jquery";
+export default {
+  name: "LVTools",
+  components: {
+    LVIcon,
+  },
+  data() {
+    return {
+      tools: [
+        // {
+        //   id: '1',
+        //   title: '微信文章',
+        //   name: 'weixin_article',
+        //   icon: 'icon_lv_weixin',
+        //   disable: true,
+        // },
+        {
+          id: "2",
+          title: "导入文章",
+          name: "imported_article",
+          icon: "icon_lv_download",
+          // disable: true,
+        },
+        // {
+        //   id: '3',
+        //   title: '上传图片',
+        //   name: 'upload_img',
+        //   icon: 'icon_lv_picture',
+        //   disable: true,
+        // },
+        // {
+        //   id: '4',
+        //   title: '清空/新建',
+        //   name: 'cleardoc',
+        //   icon: 'icon_lv_delete',
+        // },
+        // {
+        //   id: '5',
+        //   title: '复制全文',
+        //   name: 'selectall',
+        //   icon: 'icon_lv_copy',
+        //   disable: true,
+        // },
+        // {
+        //   id: '6',
+        //   title: '保存草稿',
+        //   name: 'save_draft',
+        //   icon: 'icon_lv_save',
+        //   // disable: true,
+        // },
+        // {
+        //   id: '7',
+        //   title: '保存模板',
+        //   name: 'save_template',
+        //   icon: 'icon_lv_save',
+        //   // disable: true,
+        // }
+      ],
+      clipboard: null,
+      title: null,
+      datePicker: null,
+      selectType: null,
+      description: null,
+      readText: null,
+      audioType: null,
+      videoType: null,
+    };
+  },
+  created() {
+    this.eventBus();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.copyEditorHtml();
+    });
+  },
+  computed: {
+    articleContent() {
+      return this.$store.state.tmpArticle;
     },
-    data() {
-      return {
-        tools: [
-          // {
-          //   id: '1',
-          //   title: '微信文章',
-          //   name: 'weixin_article',
-          //   icon: 'icon_lv_weixin',
-          //   disable: true,
-          // },
-          {
-            id: '2',
-            title: '导入文章',
-            name: 'imported_article',
-            icon: 'icon_lv_download',
-            // disable: true,
-          },
-          // {
-          //   id: '3',
-          //   title: '上传图片',
-          //   name: 'upload_img',
-          //   icon: 'icon_lv_picture',
-          //   disable: true,
-          // },
-          // {
-          //   id: '4',
-          //   title: '清空/新建',
-          //   name: 'cleardoc',
-          //   icon: 'icon_lv_delete',
-          // },
-          // {
-          //   id: '5',
-          //   title: '复制全文',
-          //   name: 'selectall',
-          //   icon: 'icon_lv_copy',
-          //   disable: true,
-          // },
-          // {
-          //   id: '6',
-          //   title: '保存草稿',
-          //   name: 'save_draft',
-          //   icon: 'icon_lv_save',
-          //   // disable: true,
-          // },
-          // {
-          //   id: '7',
-          //   title: '保存模板',
-          //   name: 'save_template',
-          //   icon: 'icon_lv_save',
-          //   // disable: true,
-          // }
-        ],
-        clipboard: null,
-        title: null,
-        datePicker:null,
-        selectType: null,
-        description: null,
-        readText: null,
-
-      }
+    userId() {
+      return this.$store.state.userId;
     },
-    created() {
-      this.eventBus()
+    userBid() {
+      return this.$store.state.userBid;
     },
-    mounted() {
-      this.$nextTick(() => {
-        this.copyEditorHtml()
+  },
+  methods: {
+    eventBus() {
+      this.$root.eventVue.$on("title", (message) => {
+        console.log("标题", message);
+        this.title = message;
+      });
+      this.$root.eventVue.$on("datePicker", (message) => {
+        console.log("发布时间", message);
+        this.datepicker = message;
+      });
+      this.$root.eventVue.$on("selectType", (message) => {
+        console.log("分类", message);
+        this.selectType = message;
+      });
+      this.$root.eventVue.$on("description", (message) => {
+        console.log("概述", message);
+        this.description = message;
+      });
+      this.$root.eventVue.$on("readText", (message) => {
+        console.log("阅读初始值", message);
+        this.readText = message;
+      });
+      this.$root.eventVue.$on("audioType", (message)=> {
+        console.log('是否音视频', message);
+        this.audioType = message
+      })
+      this.$root.eventVue.$on("videoType", (message)=> {
+        console.log('视频类型', message);
+        this.videoType = message
       })
     },
-    computed: {
-      articleContent() {
-        return this.$store.state.tmpArticle
-      },
-      userId() {
-        return this.$store.state.userId
-      },
-      userBid() {
-        return this.$store.state.userBid
-      }
+    copyEditorHtml() {
+      const vm = this;
+      let toolBar = $(vm.$refs.lvTools);
+      let copyBtn = toolBar.find("[data-act='selectall']");
     },
-    methods: {
-      eventBus(){
-        this.$root.eventVue.$on("title",(message)=>{   //这里最好用箭头函数，不然this指向有问题
-             console.log("1", message)  
-             this.title = message    
-        })
-        this.$root.eventVue.$on("datePicker",(message)=>{   //这里最好用箭头函数，不然this指向有问题
-             console.log("2", message)  
-             this.datepicker = message    
-        })
-        this.$root.eventVue.$on("selectType",(message)=>{   //这里最好用箭头函数，不然this指向有问题
-             console.log("3", message)    
-             this.selectType = message  
-        })
-        this.$root.eventVue.$on("description",(message)=>{   //这里最好用箭头函数，不然this指向有问题
-             console.log("4", message)  
-             this.description = message    
-        })
-        this.$root.eventVue.$on("readText",(message)=>{   //这里最好用箭头函数，不然this指向有问题
-             console.log("5", message)  
-             this.readText = message    
-        })
-      },
-      copyEditorHtml() {
-        const vm = this
-        let toolBar = $(vm.$refs.lvTools)
-        let copyBtn = toolBar.find("[data-act='selectall']")
-
-      },
-      toolClick(e, obj) {
-        if (obj.disable) return false
-        if (!this.userId) {
-          this.$util.ToastLogin()
-          return false
-        }
-        this.$emit('toolClick', {event: e, data: obj})
-      },
-      _showPhonePreview() {
-        // TODO:临时注释
-        if(!this.userId) {
-          this.$util.ToastLogin()
-          return false;
-        }
-        if(!this.articleContent) {
-          this.$util.ToastWarning('请填写内容后再进行预览')
-          return false
-          }
-        this.$emit('showPhonePreview')
-      },
-
-      _showSavePop(){
+    toolClick(e, obj) {
+      if (obj.disable) return false;
+      if (!this.userId) {
+        this.$util.ToastLogin();
+        return false;
+      }
+      this.$emit("toolClick", { event: e, data: obj });
+    },
+    _showPhonePreview() {
       // TODO:临时注释
-        if(!this.userId) {
-          this.$util.ToastLogin()
-          return false;
-        }
-        if(!this.articleContent) {
-          this.$util.ToastWarning('请填写内容后再进行保存')
-          return false
-        }
-        // this.$emit('showSavePop')
+      if (!this.userId) {
+        this.$util.ToastLogin();
+        return false;
+      }
+      if (!this.articleContent) {
+        this.$util.ToastWarning("请填写内容后再进行预览");
+        return false;
+      }
+      this.$emit("showPhonePreview");
+    },
 
-     let params = {
+    _showSavePop() {
+      // TODO:临时注释
+      if (!this.userId) {
+        this.$util.ToastLogin();
+        return false;
+      }
+      if (!this.articleContent) {
+        this.$util.ToastWarning("请填写内容后再进行保存");
+        return false;
+      }
+      // this.$emit('showSavePop')
+
+      let params = {
         userBid: this.userBid,
-        cid: "1",
+        cid: this.selectType,
         title: this.title,
         cover: "",
         description: this.description,
         content: this.articleContent,
         view: this.readText,
-        is_video: null,
-        vido_type: 0,
-        vid: ""
+        is_video: this.audioType,
+        vido_type: this.videoType,
+        vid: "",
       };
 
-      pushNewsData(params).then( res => {
-        
-      }) 
-
-
-
-
-      },
+      pushNewsData(params).then((res) => {});
+    },
     //   _publishArticle() {
     //   let params = {
     //     mid: this.userId,
@@ -208,9 +210,8 @@
     //     this.$util.ToastSuccess("发布成功");
     //   });
     // },
-
-    }
-  }
+  },
+};
 </script>
 
 <style lang="less" scoped>

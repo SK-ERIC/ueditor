@@ -2,19 +2,17 @@
   <div class="editorTitle-container">
     <div class="item">
       <span class="label">标题:</span>
-      <el-input v-model="title" placeholder="请输入标题" @change="change"></el-input>
+      <el-input v-model="title" clearable placeholder="请输入标题" @change="change"></el-input>
     </div>
     <div class="item">
       <span class="label">分类:</span>
       <el-select v-model="selectType" placeholder="请选择" @change="selectChange">
         <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.label"
-          
-        >
-        </el-option>
+          v-for="item in category"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        ></el-option>
       </el-select>
     </div>
     <div class="item">
@@ -25,6 +23,7 @@
       <span class="label">概述:</span>
       <el-input
         v-model="desc"
+        clearable
         type="textarea"
         :autosize="{ minRows: 1, maxRows: 4 }"
         placeholder="请输入内容"
@@ -41,66 +40,25 @@
         :picker-options="pickerOptions"
         value-format="timestamp"
         @change="datePickerChange"
-      >
-      </el-date-picker>
+      ></el-date-picker>
     </div>
     <div class="item">
       <span class="label">阅读初始值:</span>
-      <el-input v-model="readText" placeholder="请输入阅读初始值" @change="readChange"></el-input>
+      <el-input v-model="readText" clearable placeholder="请输入阅读初始值" @change="readChange"></el-input>
     </div>
   </div>
 </template>
 
 <script>
+import { getCategory } from "@api/home";
 export default {
   name: "EditorTitle",
   data() {
     return {
       title: "",
       readText: null,
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-         {
-          value: "选项6",
-          label: "黄金糕",
-        },
-        {
-          value: "选项7",
-          label: "双皮奶",
-        },
-        {
-          value: "选项8",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项9",
-          label: "龙须面",
-        },
-        {
-          value: "选项10",
-          label: "北京烤鸭",
-        },
-      ],
-      selectType: "",
+      category: null,
+      selectType: null,
       brand: "葆婴",
       desc: "",
       pickerOptions: {
@@ -132,23 +90,32 @@ export default {
       datePicker: "",
     };
   },
+  created() {
+    this._getCategory();
+  },
   methods: {
+    _getCategory() {
+      getCategory().then(res => {
+        const data = res.data.data;
+        this.category = data
+      })
+    },
     change() {
-      this.$root.eventVue.$emit("title",this.title)
+      this.$root.eventVue.$emit("title", this.title);
     },
     selectChange(val) {
-      this.$root.eventVue.$emit("selectType",this.selectType)
+      this.$root.eventVue.$emit("selectType", this.selectType);
     },
     descChange() {
-      this.$root.eventVue.$emit("description",this.desc)
+      this.$root.eventVue.$emit("description", this.desc);
     },
     datePickerChange(val) {
       // console.log("datePicker", this.datePicker);
-      this.$root.eventVue.$emit("datePicker", val / 1000)
+      this.$root.eventVue.$emit("datePicker", val / 1000);
     },
     readChange() {
-      this.$root.eventVue.$emit("readText", this.readText)
-    }
+      this.$root.eventVue.$emit("readText", this.readText);
+    },
   },
 };
 </script>

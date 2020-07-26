@@ -23,88 +23,95 @@
 </template>
 <script>
 export default {
-  name: 'UploadImg',
+  name: "UploadImg",
   props: {
     pic: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
   data() {
     return {
-      action: '上传地址',
+      action: "http://pc.aisspc.cn/api/upload/uploadImg",
       disabled: false,
       uploadData: {
-        file: '',
-        project: ''
+        file: "",
+        project: "",
       },
-      imageUrl: '',
+      imageUrl: "",
       loading: false,
-      maskBox:false,
-    }
+      maskBox: false,
+    };
   },
   watch: {
     pic: {
       handler(newval, oldval) {
-        console.log(newval)
+        console.log(newval);
         if (newval) {
-          this.imageUrl = newval
+          this.imageUrl = newval;
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   created() {
-    this.imageUrl = this.picUrl
+    this.imageUrl = this.picUrl;
   },
   methods: {
     // 图片上传前触发裁剪组件
     // 将图片读出并在完成时触发裁剪
     picUpload(option) {
-      let file = option.file
+      let file = option.file;
       let reader = new FileReader();
       if (file) {
-        reader.readAsDataURL(file)
+        reader.readAsDataURL(file);
       }
-     reader.onload = () => {
-        let src = reader.result
+      reader.onload = () => {
+        let src = reader.result;
         // this.cropperShow = true
         // this.cropperImg = src
         let obj = {
-          cropperShow:true,
-          cropperImg:src
-        }
-        this.$emit("modalShowFn",obj)
-      }
+          cropperShow: true,
+          cropperImg: src,
+        };
+        this.$emit("modalShowFn", obj);
+      };
     },
     handleRemove(file) {
-      this.imageUrl = '';
+      this.imageUrl = "";
       this.maskBox = false;
-      this.$emit('getUrlFn', '')
+      this.$emit("getUrlFn", "");
     },
     handleAvatarSuccess(res, file) {
       this.imageUrl = res.browser;
       this.loading = false;
-      this.$emit('getUrlFn', res.browser, file.raw)
-
+      this.$emit("getUrlFn", res.browser, file.raw);
     },
-    beforeAvatarUpload(file) { 
+    beforeAvatarUpload(file) {
+
+      console.log('上传前', file);
+
       const isLt10M = file.size / 1024 / 1024 < 10;
-      const isJPG = file.type === 'image/jpeg' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/bmp' || file.type === 'image/png';
+      const isJPG =
+        file.type === "image/jpeg" ||
+        file.type === "image/gif" ||
+        file.type === "image/jpg" ||
+        file.type === "image/bmp" ||
+        file.type === "image/png";
       if (!isLt10M) {
-        this.$message.error('上传图片大小不能超过 10MB!');
+        this.$message.error("上传图片大小不能超过 10MB!");
       }
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG/JPEG/GIF/BMP 格式!');
+        this.$message.error("上传头像图片只能是 JPG/JPEG/GIF/BMP 格式!");
       }
       return isJPG && isLt10M;
     },
     handProcess(event, file) {
+      console.log("event", event)
       this.loading = true;
-
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style scope>
 .avatar-uploader .el-upload {

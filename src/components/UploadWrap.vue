@@ -1,5 +1,5 @@
 <template>
-  <div class="uploadWrap0-contanner">
+  <div class="uploadWrap-contanner">
     <div class="item">
       <div class="wrap">
         <div class="label">是否音视频:</div>
@@ -7,33 +7,34 @@
           class="audioSelect"
           v-model="audioSelectInit"
           placeholder="请选择"
+          @change="selectAudioType"
         >
           <el-option
             v-for="item in typeOptions"
             :key="item.value"
             :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
+            :value="item.label"
+          ></el-option>
         </el-select>
       </div>
+    </div>
+    <div class="item">
       <div class="wrap">
         <div class="label">视频类型:</div>
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="videoTypeVal" placeholder="请选择" @change="selectVideoType">
           <el-option
-            v-for="item in options"
+            v-for="item in videoTypeOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value"
-          >
-          </el-option>
+          ></el-option>
         </el-select>
       </div>
     </div>
     <div class="item">
       <div class="item-l">
         <div class="label">封面:</div>
-        <el-upload
+        <!-- <el-upload
           class="avatar-uploader"
           action="http://jsonplaceholder.typicode.com/posts/"
           :show-file-list="false"
@@ -42,10 +43,9 @@
         >
           <img v-if="imageUrl" :src="imageUrl" class="avatar" />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
+        </el-upload>-->
 
-        <!-- <upload-img></upload-img> -->
-
+        <upload-img :pic="form.bgImage" @getUrlFn="getImgUrl" @modalShowFn="getModalStatus"></upload-img>
       </div>
     </div>
     <div class="item">
@@ -67,9 +67,7 @@
                 :src="videoForm.showVideoPath"
                 class="avatar video-avatar"
                 controls="controls"
-              >
-                您的浏览器不支持视频播放
-              </video>
+              >您的浏览器不支持视频播放</video>
               <i
                 v-else-if="videoForm.showVideoPath == '' && !videoFlag"
                 class="el-icon-plus avatar-uploader-icon"
@@ -86,23 +84,43 @@
         <!-- <p class="Upload_pictures">
           <span></span>
           <span>最多可以上传1个视频，建议大小50M，推荐格式mp4</span>
-        </p> -->
+        </p>-->
       </div>
     </div>
+
+
+  <el-dialog 
+    custom-class="dialog-saveArticle"
+    :visible.sync="isShowCropper"
+    :modal="true" >
+      <div class="cropperModalBody" style="width:520px;height:350px">
+        <img-cropper
+          :cropperOption="cropperOption"
+          :img="cropperImg"
+          :file="cropperFile"
+          @cropperFinish="postUploadFile"
+          @close="()=>{isShowCropper=false}"
+        ></img-cropper>
+      </div>
+    </el-dialog>
+    
   </div>
 </template>
 
 <script>
 import UploadImg from "@components/UploadImg";
+import imgCropper from "@components/imgCropper";
+
 export default {
   name: "UploadWrap",
   components: {
     UploadImg,
+    imgCropper,
   },
   data() {
     return {
       imageUrl: "",
-      audioSelectInit: "选项1",
+      audioSelectInit: "否",
       typeOptions: [
         {
           value: "选项1",
@@ -113,33 +131,29 @@ export default {
           label: "否",
         },
       ],
-      options: [
+      videoTypeOptions: [
         {
-          value: "选项1",
-          label: "video/mp4",
+          value: 0,
+          label: "未知",
         },
         {
-          value: "选项2",
-          label: "video/ogg",
+          value: 1,
+          label: "腾讯",
         },
         {
-          value: "选项3",
-          label: "video/flv",
+          value: 2,
+          label: "优酷",
         },
         {
-          value: "选项4",
-          label: "video/avi",
+          value: 3,
+          label: "电台",
         },
         {
-          value: "选项5",
-          label: "video/rmvb",
-        },
-        {
-          value: "选项6",
-          label: "video/mov",
+          value: 4,
+          label: "视频",
         },
       ],
-      value: "",
+      videoTypeVal: "",
 
       videoFlag: false,
       //是否显示进度条
@@ -150,6 +164,16 @@ export default {
       videoForm: {
         showVideoPath: "",
       },
+
+
+      isShowCropper: false,
+      form: {
+        bgImage: "",
+      },
+      cropperImg: "",
+      cropperOption: {},
+      cropperFile: {}
+
     };
   },
   computed: {
@@ -158,6 +182,12 @@ export default {
     },
   },
   methods: {
+    selectAudioType(val) {
+      this.$root.eventVue.$emit("audioType", val);
+    },
+    selectVideoType(val) {
+      this.$root.eventVue.$emit("videoType", val);
+    },
     handleAvatarSuccess(res, file) {
       this.$emit("showCropper");
       this.imageUrl = URL.createObjectURL(file.raw);
@@ -166,10 +196,10 @@ export default {
       this.$emit("showCropper");
     },
     beforeAvatarUpload(file) {
-      if (!this.userId) {
-        this.$util.ToastLogin();
-        return false;
-      }
+      // if (!this.userId) {
+      //   this.$util.ToastLogin();
+      //   return false;
+      // }
 
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 5;
@@ -235,6 +265,40 @@ export default {
       // this.$message.error(res.Message);
       // }
     },
+
+
+
+    getImgUrl(url) {
+      this.form.bgImage = url
+    },
+    getModalStatus(obj) {
+      console.log('obj :>> ', obj);
+      this.cropperImg = obj.cropperImg;
+      this.isShowCropper = obj.cropperShow;
+    },
+
+    // 文件上传-接口-上传文件
+    postUploadFile(blob) {
+      console.log('blob :>> ', blob);
+      //将blob转换为file
+      let file = new File([blob], '图片.png', { type: 'image/png', lastModified: Date.now() });
+      file.uid = Date.now();
+      var fd = new FormData();
+      fd.append("file", file, "图片.png");
+      fd.append("project", "micropark_coordination");
+
+      console.log('fd :>> ', fd);
+
+      // uploadFile(fd).then(res => {
+      //   if (res.code === 200) {
+      //     this.form.bgImage = res.browser;
+      //     //  this.$refs.upload.clearFiles()
+      //     this.isShowCropper = false;
+      //     this.cropperImg = null;
+      //     this.cropperFile = {};
+      //   }
+      // });
+    }
   },
 };
 </script>
@@ -263,6 +327,10 @@ export default {
   width: 126px;
   height: 126px;
   display: block;
+}
+
+/deep/.el-icon-plus:before {
+  line-height: 126px;
 }
 
 .uploadWrap0-contanner {

@@ -20,8 +20,8 @@ export function getTemplate(params) {
  * @param file {File}
  */
 export function uploadImg(file) {
-  // return uploadFile('/upload/uploadImg?action=uploadimage', file)
-  return uploadFile('Material/uploadImg', file)
+  return uploadFile('/upload/uploadImg?action=uploadimage', file)
+  // return uploadFile('Material/uploadImg', file)
 }
 
 /**
@@ -34,7 +34,10 @@ export function uploadImg(file) {
 export function pushNewsData(params) {
   return post('/Articles/pushNewsData', params)
 }
-
+/**
+ * @description 获取文章分类
+ * @param {*} params 
+ */
 export function getCategory(params) {
   return post("/Articles/getCategory", params)
 }
