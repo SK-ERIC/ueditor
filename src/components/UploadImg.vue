@@ -3,6 +3,7 @@
     <!-- accept="image/gif, image/jpeg,image/jpg,image/png,image/bmp" -->
     <el-upload
       class="avatar-uploader"
+      ref="uploadPic"
       v-loading="loading"
       :action="action"
       :data="uploadData"
@@ -32,7 +33,7 @@ export default {
   },
   data() {
     return {
-      action: "http://pc.aisspc.cn/api/upload/uploadImg",
+      action: "http://h5.yingku866.com/Material/uploadImg",
       disabled: false,
       uploadData: {
         file: "",
@@ -61,6 +62,10 @@ export default {
     // 图片上传前触发裁剪组件
     // 将图片读出并在完成时触发裁剪
     picUpload(option) {
+      if (!this.$store.state.userId) {
+        this.$util.ToastLogin();
+        return;
+      }
       let file = option.file;
       let reader = new FileReader();
       if (file) {
@@ -88,9 +93,11 @@ export default {
       this.$emit("getUrlFn", res.browser, file.raw);
     },
     beforeAvatarUpload(file) {
-
-      console.log('上传前', file);
-
+      if (!this.$store.state.userId) {
+        this.$refs.uploadPic.abort()
+        this.$util.ToastLogin();
+        return;
+      }
       const isLt10M = file.size / 1024 / 1024 < 10;
       const isJPG =
         file.type === "image/jpeg" ||
@@ -107,7 +114,6 @@ export default {
       return isJPG && isLt10M;
     },
     handProcess(event, file) {
-      console.log("event", event)
       this.loading = true;
     },
   },

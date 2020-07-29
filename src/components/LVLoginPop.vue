@@ -8,6 +8,7 @@
     :hide-required-asterisk="true"
     :title="'微信扫一扫'"
     width="360px"
+    :before-close="diaLogClose"
   >
     <div class="login-content">
       <div class="login-qrcode" data-type="qrcode">
@@ -96,7 +97,12 @@ export default {
     };
   },
   methods: {
+    diaLogClose(done) {
+      this.timer && clearInterval(this.timer);
+      done()
+    },
     _getQrCode() {
+      this.isShowFresh = false;
       qrCode()
         .then((res) => {
           const data = res.data.data;

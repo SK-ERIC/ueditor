@@ -11,8 +11,9 @@
             v-for="(item, index) in headerNavList"
             :key="index"
             :to="item.path"
-            >{{ item.title }}</router-link
           >
+            {{ item.title }}
+          </router-link>
         </ul>
       </div>
     </div>
@@ -130,6 +131,11 @@ export default {
 
 <style lang="less" scoped>
 @import "@assets/common/option";
+.header_nav_list {
+  li {
+    cursor: pointer;
+  }
+}
 .header_inner {
   width: @container-width;
   height: 100%;

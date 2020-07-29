@@ -8,7 +8,7 @@ function resolve(dir) {
 }
 // let baseApi = "'http://pc.aisspc.cn/api'"
 let baseApi = "'http://h5.yingku866.com'";
-let baseFile = "";
+let baseFile = "'http://h5.yingku866.com/Public/Qiniu'";
 
 module.exports = {
   publicPath: "/Public/Activity/dist",
@@ -43,7 +43,7 @@ module.exports = {
       baseFile =
         mode === "dev"
           ? "'http://localhost:8080/Qiniu'"
-          : "'http://pc.aisspc.cn/Public'";
+          : "'http://h5.yingku866.com/Public/Qiniu'";
       args[0]["process.env"].BASE_API = baseApi;
       args[0]["process.env"].BASE_File = baseFile;
       return args;

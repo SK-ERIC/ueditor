@@ -38,7 +38,9 @@ import {
   Progress,
   Spinner,
   DatePicker,
-  TimePicker 
+  TimePicker,
+  Cascader ,
+  Tooltip
 } from 'element-ui';
 
 Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 };
@@ -83,7 +85,9 @@ Vue.use(Option);
 Vue.use(Progress);
 Vue.use(Spinner);
 Vue.use(DatePicker);
-Vue.use(TimePicker );
+Vue.use(TimePicker);
+Vue.use(Cascader);
+Vue.use(Tooltip);
 
 Vue.use(Loading.directive);
 

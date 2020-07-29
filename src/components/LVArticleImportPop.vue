@@ -105,6 +105,7 @@
           url: this.importFormModel['url'],
         }
         importArticle(params).then(res => {
+          console.log('res.data.data.content :>> ', res.data.data.content);
           this.closePop()
           this.$store.commit('saveTmpArticle', res.data.data.content)
           this.$util.ToastSuccess('导入文章成功')

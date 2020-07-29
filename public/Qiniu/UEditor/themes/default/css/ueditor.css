@@ -783,9 +783,9 @@ div.edui-box {
 #edui_fixedlayer {
     z-index: 999 !important;
 }
-#edui_fixedlayer #edui161 {
+/* #edui_fixedlayer #edui161 {
     display:none;
-}
+} */
 .edui-default .edui-dialog-dragmask {
     position: absolute;
     background-color: transparent;
@@ -923,9 +923,9 @@ div.edui-box {
     width: 620px;
     height: 360px;
 }
-#edui_fixedlayer #edui161 {
+/* #edui_fixedlayer #edui161 {
     display: none;
-}
+} */
 /*段落弹出菜单*/
 .edui-default .edui-for-paragraph .edui-listitem-label {
     font-family: Tahoma, Verdana, Arial, Helvetica;

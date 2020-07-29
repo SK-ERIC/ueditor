@@ -14,14 +14,21 @@ export function getTemplateCategory() {
 export function getTemplate(params) {
   return get('/Material/getTemplate', params)
 }
+/**
+ * @desc 
+ * @param params 
+ */
+export function getQiniuToken(params) {
+  return get('/Material/getQiniuToken', params)
+}
 
 /**
  * @desc 上传图片
  * @param file {File}
  */
 export function uploadImg(file) {
-  return uploadFile('/upload/uploadImg?action=uploadimage', file)
-  // return uploadFile('Material/uploadImg', file)
+  // return uploadFile('/upload/uploadImg?action=uploadimage', file)
+  return uploadFile('Material/uploadImg?action=uploadimage', file)
 }
 
 /**
@@ -40,6 +47,36 @@ export function pushNewsData(params) {
  */
 export function getCategory(params) {
   return post("/Articles/getCategory", params)
+}
+/**
+ * @description 获取品牌
+ * @param {*} params 
+ */
+export function getBrand(params) {
+  return post("/Articles/getBrand", params)
+}
+
+/**
+ * @description 获取文章列表
+ * @param {*} params  {userId: }
+ */
+export function getMyArticle(params) {
+  return post("/Articles/getMyArticle", params)
+}
+
+/**
+ * @description 删除文章
+ * @param {*} params  {id: 文章id}
+ */
+export function delMyArticle(params) {
+  return post("/Articles/delMyArticle", params)
+}
+/**
+ * @description 文章详情
+ * @param {*} params  {id: 文章id}
+ */
+export function editorMyArticle(params) {
+  return post("/Articles/editorMyArticle", params)
 }
 
 /**
@@ -194,7 +231,7 @@ export function deleteArticle(params) {
  * @param params {Object} {id}
  */
 export function importArticle(params) {
-  return post('/wx/sync', params)
+  return post('/WxSync/sync', params)
 }
 
 

@@ -51,7 +51,7 @@ export default {
         // 初始容器宽度
         initialFrameWidth: "100%",
         // 上传文件接口
-        serverUrl: "http://pc.aisspc.cn/api/upload/uploadImg",
+        serverUrl: "http://h5.yingku866.com/Material/uploadImg",
         // UEditor 资源文件的存放路径
         UEDITOR_HOME_URL: "/Public/Activity/dist/Qiniu/UEditor/",
         // 菜单栏配置
@@ -61,7 +61,7 @@ export default {
             "redo",
             "|",
             "fontsize",
-            'fontfamily',
+            "fontfamily",
             "blockquote",
             "|",
             "removeformat",
@@ -108,27 +108,33 @@ export default {
             "justifyright",
             "justifyjustify",
             "|",
-            "insertvideo",
-            "background",
-            "insertimage",
-            "searchreplace",
-            "source",
+            "insertvideo", //视频
+            "background", //背景
+            "insertimage", //多图上传
+            "searchreplace", //查询替换
+            "|",
+            "source", //源代码
+            // "music", //音乐
           ],
         ],
-        'fontfamily':[
-          { label:'',name:'songti',val:'宋体,SimSun'},
-          { label:'仿宋',name:'fangsong',val:'仿宋,FangSong'},
-          { label:'仿宋_GB2312',name:'fangsong',val:'仿宋_GB2312,FangSong'},
-          { label:'',name:'kaiti',val:'楷体,楷体_GB2312, SimKai'},
-          { label:'',name:'yahei',val:'微软雅黑,Microsoft YaHei'},
-          { label:'',name:'heiti',val:'黑体, SimHei'},
-          { label:'',name:'lishu',val:'隶书, SimLi'},
-          { label:'',name:'andaleMono',val:'andale mono'},
-          { label:'',name:'arial',val:'arial, helvetica,sans-serif'},
-          { label:'',name:'arialBlack',val:'arial black,avant garde'},
-          { label:'',name:'comicSansMs',val:'comic sans ms'},
-          { label:'',name:'impact',val:'impact,chicago'},
-          { label:'',name:'timesNewRoman',val:'times new roman'}
+        fontfamily: [
+          { label: "", name: "songti", val: "宋体,SimSun" },
+          { label: "仿宋", name: "fangsong", val: "仿宋,FangSong" },
+          {
+            label: "仿宋_GB2312",
+            name: "fangsong",
+            val: "仿宋_GB2312,FangSong",
+          },
+          { label: "", name: "kaiti", val: "楷体,楷体_GB2312, SimKai" },
+          { label: "", name: "yahei", val: "微软雅黑,Microsoft YaHei" },
+          { label: "", name: "heiti", val: "黑体, SimHei" },
+          { label: "", name: "lishu", val: "隶书, SimLi" },
+          { label: "", name: "andaleMono", val: "andale mono" },
+          { label: "", name: "arial", val: "arial, helvetica,sans-serif" },
+          { label: "", name: "arialBlack", val: "arial black,avant garde" },
+          { label: "", name: "comicSansMs", val: "comic sans ms" },
+          { label: "", name: "impact", val: "impact,chicago" },
+          { label: "", name: "timesNewRoman", val: "times new roman" },
         ],
       },
     };

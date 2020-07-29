@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { uploadImg, publishArticle } from "@api/home.js";
+// import { uploadImg, publishArticle } from "@api/home.js";
 import LVArticleSavePopCut from "@components/LVArticleSavePopCut";
 
 export default {

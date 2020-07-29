@@ -68,7 +68,7 @@ export default {
   },
   created() {
     this.$store.commit('clearDraftList')
-    this._getDraftList();
+    // this._getDraftList();
   },
   computed: {
     userId() {
@@ -104,7 +104,7 @@ export default {
       let bol = true;
       this.$store.commit("_loading", bol);
 
-      this._getDraftList()
+      // this._getDraftList()
     },
     delDraft(id, index) {
       this.$confirm("此操作将永久删除该草稿内容, 是否继续?", "提示", {

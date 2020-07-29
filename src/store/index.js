@@ -1,19 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import router from "@/router/index";
 import createPersistedState from "vuex-persistedstate"
 import { getDraftList } from "../api/home";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    baseFile: null,
+    baseFile: "http://h5.yingku866.com/Public/Qiniu",
     userId: null,
+    userBrand: null,
     userBid: null,
     userSite: null,
     userName: null,
     userUpic: null,
     userTel: null,
     tmpArticle: null,
+    isEditor: null,
 
     loading: false,//HomeDraft页面
     page: 1,
@@ -26,19 +29,24 @@ export default new Vuex.Store({
     logout(state) {
       state.userId = null
       state.userBid = null
+      state.userBrand = null
       state.userSite = null
       state.userName = null
       state.userUpic = null
       state.userTel = null
       state.tmpArticle = null
+      state.isEditor = null
       window.location.reload()
     },
     setBaseFile(state) {
       state.baseFile = process.env.BASE_File
+      console.log('process.env.BASE_File :>> ', process.env.BASE_File);
     },
     setMemberData(state, data) {
       state.userId = data.userId ? data.userId : null
       state.userBid = data.userBid ? data.userBid : null
+      state.userBrand = data.userBrand ? data.userBrand : null
+      state.isEditor = data.isEditor ? data.isEditor : null
       state.userSite = data.userSite ? data.userSite : null
       state.userTel = data.userTel ? data.userTel : null
       state.userName = data.userName ? data.userName : '未登录'
@@ -47,6 +55,8 @@ export default new Vuex.Store({
     updateMemberData(state, data) {
       state.userId = data.userId ? data.userId : state.userId
       state.userBid = data.userBid ? data.userBid : state.userBid
+      state.userBrand = data.userBrand ? data.userBrand : state.userBrand
+      state.isEditor = data.isEditor ? data.isEditor : state.isEditor
       state.userSite = data.userSite ? data.userSite : state.userSite
       state.userTel = data.userTel ? data.userTel : state.userTel
       state.userName = data.userName ? data.userName : state.userName
@@ -55,11 +65,15 @@ export default new Vuex.Store({
     clearMemberData(state) {
       state.userId = null
       state.userBid = null
+      state.userBrand = null
+      state.isEditor = null
       state.userName = null
       state.userUpic = null
     },
     clearDoc(state) {
       state.tmpArticle = null
+      router.push(`/home/material`)
+      window.location.reload();
     },
     saveTmpArticle(state, data) {
       state.tmpArticle = data ? data : null

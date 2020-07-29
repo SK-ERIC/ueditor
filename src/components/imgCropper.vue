@@ -135,10 +135,8 @@ export default {
 
     // 确定裁剪
     cropperFinish(type) {
-      console.log('type :>> ', type);
       if (type === 'Blob') {
         this.$refs.cropper.getCropBlob((data) => {
-          console.log("data", data)
           let file = data;
           file.name = this.file.name;
           this.$emit('cropperFinish', file, data);
@@ -146,7 +144,6 @@ export default {
 
       } else {
         this.$refs.cropper.getCropData(data => {
-          console.log('data :>> ', data);
           // 将剪裁后base64的图片转化为file格式
           let file = this.convertBase64UrlToBlob(data);
           file.name = this.file.name;
