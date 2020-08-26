@@ -2,7 +2,7 @@
   <div class="header_inner">
     <div class="left">
       <!-- <img :src="`${baseFile}/common/img/logo.png`" alt="" class="logo"> -->
-      <h3>文章管理后台</h3>
+      <!-- <h3>文章自主发布</h3> -->
       <div class="header_nav_container">
         <ul class="header_nav_list">
           <router-link
@@ -163,7 +163,7 @@ export default {
         align-items: center;
         margin: 0;
         padding: 0;
-        margin-left: 21px;
+        margin-left: 10px;
         > li {
           width: 100px;
           height: 100%;

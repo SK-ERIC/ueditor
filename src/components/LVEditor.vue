@@ -22,6 +22,9 @@
 
 <script>
 import VueUeditorWrap from "vue-ueditor-wrap";
+import {
+  getConfig,
+} from "@api/home";
 import $ from "jquery";
 
 export default {
@@ -51,9 +54,9 @@ export default {
         // 初始容器宽度
         initialFrameWidth: "100%",
         // 上传文件接口
-        serverUrl: "http://h5.yingku866.com/Material/uploadImg",
+        serverUrl: ``,
         // UEditor 资源文件的存放路径
-        UEDITOR_HOME_URL: "/Public/Activity/dist/Qiniu/UEditor/",
+        UEDITOR_HOME_URL: `/Public/Activity/dist/Qiniu/UEditor/`,
         // 菜单栏配置
         toolbars: [
           [
@@ -141,6 +144,7 @@ export default {
   },
   created() {
     this.init();
+    this._getConfig()
   },
   mounted() {},
   computed: {
@@ -149,6 +153,13 @@ export default {
     },
   },
   methods: {
+    _getConfig() {
+      getConfig().then((res) => {
+        if (res.data.code == 200) {
+          this.serverUrl = `${res.data.data.cdn_domain}/Material/uploadImg`
+        }
+      });
+    },
     init() {
       window.jQuery = $;
       if (this.tmpArticle) {
@@ -212,7 +223,8 @@ export default {
 @import url("https://at.alicdn.com/t/font_1028511_48es6gri7vj.css");
 @import "@assets/common/option";
 .lv_editor_container {
-  width: 100%;
+  // width: 100%;
+  width: 790px;
   height: 100%;
   font-size: 14px;
   line-height: 1.5;

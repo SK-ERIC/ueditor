@@ -66,8 +66,6 @@ const routes = [
 const router = new VueRouter({
   mode: "history",
   // TODO:
-  // base: '/index/vue',
-  // base: '/Public/Activity/dist',
   base:
     process.env.NODE_ENV === "production"
       ? "/index/vue"

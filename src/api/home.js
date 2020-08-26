@@ -7,6 +7,18 @@ export function getTemplateCategory() {
   return get('/Material/getTemplateCategory', {})
 }
 
+export function getMatrixList(params) {
+  return get('/Articles/getMatrixList',params)
+}
+
+export function getConfig(params) {
+  return get('/index/getConfig',params)
+}
+
+export function getAppList(params) {
+  return get('/Articles/getAppList', params)
+}
+
 /**
  * @desc 获取素材详情列表
  * @param params {Object} {csid: 二级分类id}

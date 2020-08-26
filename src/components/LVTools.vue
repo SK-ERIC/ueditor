@@ -94,6 +94,8 @@ export default {
       cover: "",
       vid: "",
       bid: "",
+      matrix_id: null,
+      appid:null
     };
   },
   created() {
@@ -133,6 +135,9 @@ export default {
               this.videoType = data.data.vido_type || 0;
               this.cover = data.data.cover || "";
               this.vid = data.data.vid || "";
+              this.bid = data.data.company_id || this.$store.state.userBid;
+              this.matrix_id = data.data.matrix_id || null
+              this.appid = data.data.appid || null
               this.$store.commit("saveTmpArticle", data.data.content);
             }
           })
@@ -167,6 +172,14 @@ export default {
       this.$root.eventVue.$on("description", (message) => {
         console.log("概述", message);
         this.description = message;
+      });
+      this.$root.eventVue.$on("matrix_id", (message) => {
+        console.log("公众号", message);
+        this.matrix_id = message;
+      });
+      this.$root.eventVue.$on("appid", (message) => {
+        console.log("项目", message);
+        this.appid = message;
       });
       this.$root.eventVue.$on("readText", (message) => {
         console.log("阅读初始值", message);
@@ -238,6 +251,21 @@ export default {
         this.$message.error("请正确选择分类");
         return;
       }
+      if (!this.appid) {
+        console.log("this.appid:>> ", this.appid);
+        this.$message.error("请正确选择项目");
+        return;
+      }
+      // if (!this.matrix_id) {
+      //   console.log("this.matrix_id :>> ", this.matrix_id);
+      //   this.$message.error("请正确选择公众号");
+      //   return;
+      // }
+      // if (!this.bid) {
+      //   console.log("this.bid :>> ", this.bid);
+      //   this.$message.error("请正确选择品牌");
+      //   return;
+      // }
       if (!this.description) {
         this.$message.error("请正确填写文章概述");
         return;
@@ -253,7 +281,8 @@ export default {
         return;
       }
 
-      if (this.audioType) {
+      if (this.audioType && this.audioType != "0") {
+        console.log("audioType", this.audioType);
         if (!this.videoType) {
           this.$message.error("请正确选择视频类型");
           return;
@@ -279,6 +308,8 @@ export default {
         is_video: this.audioType,
         vido_type: this.videoType,
         vid: this.vid,
+        matrix_id: this.matrix_id,
+        appid: this.appid
       };
 
       pushNewsData(params).then((res) => {

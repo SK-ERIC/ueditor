@@ -22,6 +22,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column width="100px" align="center" label="项目">
+        <template slot-scope="{ row }">
+          <span>{{ row.app_name }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column width="100px" align="center" label="品牌">
         <template slot-scope="{ row }">
           <span>{{ row.brand_name }}</span>

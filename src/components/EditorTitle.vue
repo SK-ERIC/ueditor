@@ -25,15 +25,45 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item label="项目" prop="project">
+        <el-select
+          v-model="ruleForm.project"
+          placeholder="请选择项目"
+          @change="selectProjectChange"
+        >
+          <el-option
+            v-for="(item, index) in appList"
+            :key="index"
+            :label="item.app_name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="公众号" prop="matrix">
+        <el-select
+          v-model="ruleForm.matrix"
+          placeholder="请选择公众号"
+          @change="selectMatrixChange"
+        >
+          <el-option
+            v-for="(item, index) in matrixList"
+            :key="index"
+            :label="item.app_name"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="品牌" prop="brand">
-        <!-- <el-input v-model="userBrand" :disabled="brandDisabled"></el-input> -->
-        <el-select 
+        <el-select
           v-model="ruleForm.brand"
           :disabled="brandDisabled"
           @change="selectBrandChange"
         >
           <el-option
-            v-for="(item, index) in brandList" 
+            v-for="(item, index) in brandList"
             :key="index"
             :label="item.name"
             :value="item.api_company_id"
@@ -42,7 +72,6 @@
         </el-select>
 
         <!-- <el-cascader :options="brandList" :props="props" :show-all-levels="false"></el-cascader> -->
-
       </el-form-item>
 
       <el-form-item label="概述" prop="desc">
@@ -93,7 +122,13 @@
 </template>
 
 <script>
-import { getCategory, editorMyArticle ,getBrand} from "@api/home";
+import {
+  getCategory,
+  editorMyArticle,
+  getBrand,
+  getMatrixList,
+  getAppList,
+} from "@api/home";
 export default {
   name: "EditorTitle",
   data() {
@@ -101,10 +136,12 @@ export default {
       ruleForm: {
         title: "",
         category: "",
-        brand: this.$store.state.userBrand,
+        brand: "",
         desc: "",
         datePicker: null,
         readText: null,
+        matrix: "",
+        project: "",
       },
       title: "",
       readText: null,
@@ -174,13 +211,17 @@ export default {
           },
         ],
         readText: [{ required: true }],
-        brand: [{required: true}]
+        brand: [{ required: true, message: "请选择品牌" }],
+        matrix: [{ required: true, message: "请选择公众号" }],
+        project: [{ required: true, message: "请选择项目" }],
       },
       props: {
-        label: 'name',
+        label: "name",
         value: "chr",
-        children: "data"
-      }
+        children: "data",
+      },
+      matrixList: [],
+      appList: [],
     };
   },
   computed: {
@@ -188,39 +229,67 @@ export default {
       return this.$store.state.userBrand;
     },
     brandDisabled() {
-      return this.$store.state.isEditor != 1
-    }
+      // return this.$store.state.isEditor != 1;
+    },
   },
   created() {
     this._editorMyArticle();
     this._getCategory();
-    this._getBrand()
+    this._getAppList();
+    // this._getMatrixList();
+    // this._getBrand({matrix_id: 1})
   },
   methods: {
-    _getBrand() {
-      getBrand().then(res => {
-        const data = res.data
+    _getAppList() {
+      getAppList().then((res) => {
+        const data = res.data;
         if (data.code == 200) {
-          this.brandList = data.data
+          this.appList = data.data;
         }
-      })
+      });
+    },
+    _getMatrixList(params) {
+      getMatrixList(params).then((res) => {
+        const data = res.data;
+        if (data.code == 200) {
+          this.matrixList = data.data;
+        }
+      });
+    },
+    _getBrand(params) {
+      getBrand(params).then((res) => {
+        const data = res.data;
+        if (data.code == 200) {
+          this.brandList = data.data;
+        }
+      });
     },
     _editorMyArticle() {
       const id = this.$route.query.id || null;
       if (id) {
         editorMyArticle({ id })
           .then((res) => {
-            const data = res.data
+            const data = res.data;
             if (data.code == 200) {
               this.ruleForm.title = data.data.title || "";
               this.ruleForm.category = data.data.cid || "";
               this.ruleForm.desc = data.data.description || "";
-              this.ruleForm.datePicker = data.data.add_time*1000 || ""
-              this.ruleForm.readText = data.data.views || ""
-              this.ruleForm.brand = data.data.brand_name || ""
-              this.$store.state.tmpArticle = data.data.content || ""
+              this.ruleForm.datePicker = data.data.add_time * 1000 || "";
+              this.ruleForm.readText = data.data.views || "";
+              this.ruleForm.brand = data.data.brand_name || "";
+              this.ruleForm.project = data.data.appid || '';
+              this.ruleForm.matrix = data.data.matrix_id || '';
+              this.$store.state.tmpArticle = data.data.content || "";
 
               // this.$root.eventVue.$emit("ruleForm", this.ruleForm);
+
+              if (data.data.appid) {
+                this._getMatrixList({ app_id: data.data.appid });
+                this._getBrand({
+                  matrix_id: data.data.matrix_id,
+                  app_id: data.data.appid,
+                });
+              }
             }
           })
           .catch((e) => {});
@@ -245,25 +314,49 @@ export default {
       this.$root.eventVue.$emit("description", val);
     },
     datePickerChange(val) {
-      // console.log("datePicker", this.datePicker);
       this.$root.eventVue.$emit("datePicker", val / 1000);
     },
     readChange(val) {
       this.$root.eventVue.$emit("readText", val);
+    },
+    selectMatrixChange(val) {
+      this._getBrand({ matrix_id: val, appid: this.ruleForm.project });
+      this.ruleForm.brand = "";
+      this.$root.eventVue.$emit("matrix_id", val);
+    },
+    selectProjectChange(val) {
+      this.matrixList.length = 0;
+      this.brandList.length = 0;
+      this._getMatrixList({ app_id: val });
+      this.ruleForm.matrix = "";
+      this.ruleForm.brand = "";
+      this.$root.eventVue.$emit("appid", val);
+      console.log("appid", val);
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
-/deep/.el-form-item__content{
+/deep/.el-form-item__content {
   flex: 1;
-  .el-select{
+  .el-select {
     width: 100%;
+  }
+  .el-date-editor {
+    width: 100%;
+  }
+  .el-form-item__error {
+    display: none;
   }
 }
 /deep/.el-form-item {
   display: flex;
+  flex-direction: column;
+  margin-bottom: initial;
+  .el-form-item__label {
+    text-align: left;
+  }
 }
 .editorTitle-container {
   .item {

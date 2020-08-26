@@ -236,13 +236,19 @@ export default {
           // width: 500px;
           height: 100%;
           flex: none;
-          margin-right: 12px;
+          margin: 0 12px;
           overflow: hidden;
           display: flex;
           flex-direction: column;
         }
         .titleWrap_col {
           margin-right: 20px;
+          overflow-y: scroll;
+          // max-height: 96%;
+          max-height: calc(@container-height - 20px);
+          &::-webkit-scrollbar{
+            display: none;
+          }
         }
       }
     }

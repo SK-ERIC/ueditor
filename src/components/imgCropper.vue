@@ -29,7 +29,7 @@
         :autoCrop="true"
         :autoCropWidth="200"
         :autoCropHeight="200"
-        :fixedBox="true"
+        :fixedBox="fixedBox"
         :fixed="cropperOption.fixed"
         :fixedNumber="cropperOption.fixedNumber"
         :centerBox="cropperOption.centerBox"
@@ -68,7 +68,7 @@ export default {
         autoCrop: true, // 是否默认生成截图框
         autoCropWidth: 200, // 默认生成截图框宽度
         autoCropHeight: 200, // 默认生成截图框高度
-        fixedBox: true, // 截图框固定大小
+        fixedBox: false, // 截图框固定大小
         fixed: true, // 是否开启截图框宽高固定比例
         fixedNumber: [1, 1], // 截图框的宽高比例
         original: false, // 上传图片按照原始比例渲染

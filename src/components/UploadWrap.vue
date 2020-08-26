@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="item">
-      <div class="item-l">
+      <div class="item-l upload">
         <div class="label coverLabel">封面:</div>
         <upload-img
           :pic="form.bgImage"
@@ -46,7 +46,7 @@
       </div>
     </div>
     <div class="item" v-if="isShowVideoUpload && isShowUploadVideoAudio">
-      <div class="item-l">
+      <div class="item-l upload">
         <div class="label videoLabel">视频:</div>
         <div class="pic_img">
           <div class="pic_img_box">
@@ -94,7 +94,7 @@
     </div>
 
     <div class="item" v-if="isShowAudioUpload && isShowUploadVideoAudio">
-      <div class="item-l">
+      <div class="item-l upload">
         <el-upload
           id="audioUpload"
           class="Audio-uploader"
@@ -149,7 +149,12 @@
 <script>
 import UploadImg from "@components/UploadImg";
 import imgCropper from "@components/imgCropper";
-import { uploadImg, editorMyArticle, getQiniuToken } from "@api/home";
+import {
+  uploadImg,
+  editorMyArticle,
+  getQiniuToken,
+  getConfig,
+} from "@api/home";
 import { formatTimeToStr } from "@/utils/date";
 
 export default {
@@ -161,7 +166,7 @@ export default {
   data() {
     return {
       imageUrl: "",
-      uploadUrl: "http://h5.yingku866.com/Material/uploadImg",
+      uploadUrl: "",
       audioSelectInit: "",
       typeOptions: [
         {
@@ -226,12 +231,22 @@ export default {
       isShowAudioUpload: false,
       isShowVideoUpload: false,
       isShowUploadVideoAudio: false,
+      cdn_domain: "",
     };
   },
   created() {
     this._editorMyArticle();
+    this._getConfig();
   },
   methods: {
+    _getConfig() {
+      getConfig().then((res) => {
+        if (res.data.code == 200) {
+          this.cdn_domain = res.data.data.cdn_domain;
+          this.uploadUrl = `${res.data.data.cdn_domain}/Material/uploadImg`
+        }
+      });
+    },
     onChange(file, fileList) {
       this.hideUpload = fileList.length >= this.limitCount;
     },
@@ -363,7 +378,7 @@ export default {
       this.videoUploadPercent = 0;
       //前台上传地址
       if (file.status == "success") {
-        const url = `https://zfile.bxwh002.cn/${file.response.key}`;
+        const url = `${this.cdn_domain}/${file.response.key}`;
         this.videoForm.showVideoPath = url;
         this.$root.eventVue.$emit("vid", url);
       } else {
@@ -454,7 +469,7 @@ export default {
     handleAudioSuccess(res, file) {
       //前台上传地址
       if (file.status == "success") {
-        const url = `https://zfile.bxwh002.cn/${file.response.key}`;
+        const url = `${this.cdn_domain}/${file.response.key}`;
         this.fileList.push({ name: file.name, url });
         // this.videoForm.showVideoPath = url;
         this.$root.eventVue.$emit("vid", url);
@@ -559,11 +574,12 @@ export default {
 }
 
 .uploadWrap-contanner {
-  margin-top: 10px;
+  margin-top: 5px;
   .item {
     display: flex;
+    flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
+    // align-items: center;
     .item-l,
     .item-r {
       display: flex;
@@ -573,6 +589,18 @@ export default {
         line-height: 126px;
         margin-right: 10px;
         white-space: nowrap;
+      }
+    }
+
+    .item-l {
+      &.upload {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        .label {
+          line-height: 32px;
+        }
       }
     }
     .audioSelect {
@@ -590,17 +618,26 @@ export default {
     }
     .wrap {
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
       margin-top: 10px;
-      margin-right: 30px;
+      color: #606266;
+      font-size: 14px;
+      // margin-right: 30px;
+
+      width: 100%;
+      /deep/.el-select {
+        width: 100%;
+      }
+
       &:last-child {
         margin-right: 0;
       }
       .label {
-        margin-right: 10px;
+        // margin-right: 10px;
         // white-space: nowrap;
         text-align: center;
-        margin-right: 10px;
+        margin-bottom: 5px;
       }
     }
   }

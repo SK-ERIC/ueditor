@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    baseFile: "http://h5.yingku866.com/Public/Qiniu",
+    baseFile: "http://h5.yingku866.com/Public/Activity/dist/Qiniu",
     userId: null,
     userBrand: null,
     userBid: null,
@@ -50,7 +50,7 @@ export default new Vuex.Store({
       state.userSite = data.userSite ? data.userSite : null
       state.userTel = data.userTel ? data.userTel : null
       state.userName = data.userName ? data.userName : '未登录'
-      state.userUpic = data.userUpic ? data.userUpic : 'https://cdn.xhh1888.cn/upic/nopic.png'
+      state.userUpic = data.userUpic ? data.userUpic : 'http://cdn2.tuku689.com/upic/nopic.png'
     },
     updateMemberData(state, data) {
       state.userId = data.userId ? data.userId : state.userId
