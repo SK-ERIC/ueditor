@@ -20,7 +20,7 @@
     "js-cookie": "2.2.0",
     "moment": "~2.27.0",
     "normalize.css": "~8.0.1",
-    "qs": "~6.9.4",
+    "qs": "~6.9.7",
     "vue": "~2.6.11",
     "vue-cropper": "^0.5.5",
     "vue-infinite-scroll": "~2.0.2",
